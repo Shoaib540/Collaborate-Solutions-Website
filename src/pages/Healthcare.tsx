@@ -26,6 +26,7 @@ import {
 import { Reveal } from '../components/Reveal'
 import { ComplianceBanner } from '../components/ComplianceBanner'
 import { Seo } from '../components/Seo'
+import { useLanguage } from '../i18n'
 import {
   certifications,
   clinicalSpecialties,
@@ -38,6 +39,8 @@ import {
   type Certification,
   type Solution,
 } from '../data/healthcare'
+import { pillarTabsAr, solutionAr, specialtyAr } from '../data/healthcare.ar'
+import { ehrMedia } from '../data/media'
 
 const icons: Record<string, LucideIcon> = {
   ehr: Activity,
@@ -58,7 +61,23 @@ const icons: Record<string, LucideIcon> = {
 
 const specialtyIcons = [Stethoscope, HeartPulse, Bandage, Brain, Users, Building2]
 
+function localizeSolution(item: Solution, locale: string): Solution {
+  if (locale !== 'ar') return item
+  const ar = solutionAr[item.id]
+  if (!ar) return item
+  return {
+    ...item,
+    title: ar.title,
+    subtitle: ar.subtitle,
+    summary: ar.summary,
+    features: ar.features,
+    roi: ar.roi,
+    badge: ar.badge,
+  }
+}
+
 export function Healthcare() {
+  const { t, locale } = useLanguage()
   const [activeTab, setActiveTab] = useState('all')
   const [selectedProduct, setSelectedProduct] = useState<Solution | null>(null)
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null)
@@ -76,9 +95,9 @@ export function Healthcare() {
   })
 
   const filtered = useMemo(() => {
-    if (activeTab === 'all') return solutions
-    return solutions.filter((s) => s.pillar === activeTab)
-  }, [activeTab])
+    const base = activeTab === 'all' ? solutions : solutions.filter((s) => s.pillar === activeTab)
+    return base.map((s) => localizeSolution(s, locale))
+  }, [activeTab, locale])
 
   const estimatedRpmPatients = Math.round(patientVolume * 0.3 * (rpmAdoption / 100))
   const estimatedCcmPatients = Math.round(patientVolume * 0.25 * (rpmAdoption / 100))
@@ -112,32 +131,36 @@ export function Healthcare() {
 
   return (
     <div className="bg-[#f4f1ea]">
-      <Seo
-        title="Healthcare IT Platform"
-        description="ONC, CMS MIPS, FHIR, and NPHIES-ready healthcare IT — EHR, telehealth, RPM, CCM, and ROI tools from Collaborate Solutions."
-        path="/healthcare"
-      />
+      <Seo title={t.ehr.seoTitle} description={t.ehr.seoDesc} path="/ehr" />
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-[#d5dcd4] bg-[#081c15] pt-28 pb-16 text-[#faf8f4] sm:pt-32 sm:pb-20">
         <div className="absolute inset-0">
-          <img src="/media/images/healthcare-ops.jpg" alt="" className="h-full w-full object-cover opacity-35" />
+          <video
+            className="h-full w-full object-cover opacity-40"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={ehrMedia.productHero}
+          >
+            <source src={ehrMedia.clinicVideo} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-[linear-gradient(100deg,#081c15_0%,rgba(8,28,21,0.88)_55%,rgba(8,28,21,0.7)_100%)]" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c6a75e]/35 bg-[#081c15]/60 px-3.5 py-1.5 text-xs font-semibold text-[#e6d5a8]">
             <BadgeCheck className="h-4 w-4" />
-            ONC 2015 Cures Certified • CMS MIPS Registry • HL7® FHIR® R4
+            {t.home.trustLine}
           </div>
+          <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-[#c6a75e]">{t.ehr.eyebrow}</p>
           <h1
-            className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl"
+            className="mt-3 max-w-4xl text-4xl font-semibold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl"
           >
-            The Certified Operating System for{' '}
-            <span className="text-[#e6d5a8]">Modern Healthcare Delivery</span>
+            {t.ehr.title}
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-relaxed text-[#faf8f4]/80 sm:text-lg">
-            Unify your EHR, Practice Management, Telehealth, RPM, and Care Management into a certified
-            interoperable ecosystem. Tested and accredited for ONC Health IT, CMS MIPS 2026, MU3, and Saudi
-            NPHIES data exchange.
+            {t.ehr.body}
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             {['ONC 2015 Edition Cures Update', 'CMS MIPS Qualified Registry', 'HL7® FHIR® R4 Validated'].map(
@@ -154,10 +177,10 @@ export function Healthcare() {
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#contact-demo" className="btn-gold">
-              Request Custom Demo
+              {t.cta.demo}
             </a>
             <a href="#certifications" className="btn-ghost">
-              View Certification Details
+              {t.cta.viewCerts}
             </a>
           </div>
           <div className="mt-10 grid grid-cols-2 gap-3 border-t border-[#faf8f4]/15 pt-6 text-xs font-semibold text-[#faf8f4]/75 sm:grid-cols-4 sm:text-sm">
@@ -273,7 +296,7 @@ export function Healthcare() {
                         : 'text-black hover:bg-[#e8eee9] hover:text-black'
                     }`}
                   >
-                    {tab.label}
+                    {locale === 'ar' ? pillarTabsAr[tab.id] ?? tab.label : tab.label}
                   </button>
                 ))}
               </div>
@@ -346,16 +369,32 @@ export function Healthcare() {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {clinicalSpecialties.map((spec, i) => {
               const Icon = specialtyIcons[i] ?? Stethoscope
+              const ar = specialtyAr[spec.title]
+              const photo = [
+                ehrMedia.modules[0],
+                ehrMedia.modules[2],
+                ehrMedia.surgery,
+                ehrMedia.modules[3],
+                ehrMedia.patient,
+                ehrMedia.modules[1],
+              ][i]
               return (
                 <article
                   key={spec.title}
-                  className="border border-[#d5dcd4] bg-[#faf8f4] p-6 transition hover:border-[#1b4332]/35 hover:bg-white hover:shadow-[0_14px_36px_-24px_rgba(27,67,50,0.4)]"
+                  className="overflow-hidden border border-[#d5dcd4] bg-[#faf8f4] transition hover:border-[#1b4332]/35 hover:bg-white hover:shadow-[0_14px_36px_-24px_rgba(27,67,50,0.4)]"
                 >
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center bg-[#1b4332] text-[#faf8f4]">
-                    <Icon className="h-5 w-5" />
+                  <img src={photo} alt="" className="aspect-[16/9] w-full object-cover" />
+                  <div className="p-6">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center bg-[#1b4332] text-[#faf8f4]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-extrabold text-black">
+                      {locale === 'ar' && ar ? ar.title : spec.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-black">
+                      {locale === 'ar' && ar ? ar.desc : spec.desc}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-extrabold text-black">{spec.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-black">{spec.desc}</p>
                 </article>
               )
             })}

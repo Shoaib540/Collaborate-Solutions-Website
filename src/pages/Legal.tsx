@@ -163,8 +163,8 @@ export function Credits() {
       </p>
       <h2 className="text-xl font-extrabold">Photography</h2>
       <ul className="list-disc space-y-2 pl-5">
-        <li>Service, office, and lifestyle imagery sourced from Unsplash (unsplash.com/license).</li>
-        <li>Hero background video sourced from Pexels (pexels.com/license).</li>
+        <li>EHR clinical imagery sourced from Unsplash (unsplash.com/license).</li>
+        <li>EHR hero and clinic walkthrough videos sourced from Pexels (pexels.com/license).</li>
         <li>Leadership portraits currently use licensed stock stand-ins until official company photos are supplied.</li>
       </ul>
       <h2 className="text-xl font-extrabold">Replace with your assets</h2>

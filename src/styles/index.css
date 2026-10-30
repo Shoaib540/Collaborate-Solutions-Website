@@ -4,6 +4,11 @@
 @import "@fontsource/plus-jakarta-sans/600.css";
 @import "@fontsource/plus-jakarta-sans/700.css";
 @import "@fontsource/plus-jakarta-sans/800.css";
+@import "@fontsource/noto-sans-arabic/400.css";
+@import "@fontsource/noto-sans-arabic/500.css";
+@import "@fontsource/noto-sans-arabic/600.css";
+@import "@fontsource/noto-sans-arabic/700.css";
+@import "@fontsource/noto-sans-arabic/800.css";
 
 @theme {
   --color-forest: #1b4332;
@@ -21,8 +26,9 @@
   --color-cream: #faf8f4;
   --color-surface: #ffffff;
 
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -33,7 +39,7 @@
   body {
     margin: 0;
     min-height: 100vh;
-    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Plus Jakarta Sans", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
     color: #000000;
     background-color: #f4f1ea;
     background-image:
@@ -44,13 +50,25 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html[lang="ar"] body,
+  html[dir="rtl"] body {
+    font-family: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+
   h1,
   h2,
   h3,
   .font-display {
-    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Plus Jakarta Sans", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
     letter-spacing: -0.03em;
     font-weight: 700;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3 {
+    font-family: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0;
   }
 
   ::selection {

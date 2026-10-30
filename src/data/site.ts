@@ -1,8 +1,8 @@
 export const site = {
   name: 'Collaborate Solutions',
-  tagline: 'Turning Ideas Into Reality',
+  tagline: 'Certified EHR for modern care',
   description:
-    'We bridge the gap between your business goals and operational excellence with innovative IT, marketing, and healthcare solutions.',
+    'Certified Electronic Health Records for clinics and hospitals across the United States and Saudi Arabia / Gulf.',
   phone: '+92 333 4415825',
   phoneHref: 'tel:+923334415825',
   email: 'info@collaborate-solutions.com',
@@ -20,11 +20,15 @@ export const site = {
 } as const
 
 export const navLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
-  { label: 'Services', to: '/services' },
-  { label: 'Healthcare IT', to: '/healthcare' },
-  { label: 'Careers', to: '/careers' },
-  { label: 'Blog', to: '/blog' },
-  { label: 'Contact', to: '/contact' },
+  { key: 'home' as const, to: '/' },
+  { key: 'ehr' as const, to: '/ehr' },
+  { key: 'about' as const, to: '/about' },
+  { key: 'contact' as const, to: '/contact' },
+]
+
+export const ehrModuleLinks = [
+  { label: 'Electronic Health Records', labelAr: 'السجلات الصحية الإلكترونية', hash: 'solutions' },
+  { label: 'Practice Management', labelAr: 'إدارة الممارسة', hash: 'solutions' },
+  { label: 'Telehealth & RPM', labelAr: 'التطبيب والمراقبة عن بُعد', hash: 'solutions' },
+  { label: 'MIPS & NPHIES', labelAr: 'MIPS و NPHIES', hash: 'compliance' },
 ] as const
