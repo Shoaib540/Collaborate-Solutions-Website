@@ -3,20 +3,27 @@ import { ArrowRight, BadgeCheck, Play } from 'lucide-react'
 import { ehrMedia } from '../data/media'
 import { useLanguage } from '../i18n'
 import { DemoButton } from './DemoButton'
+import { ProductMedia } from './ProductMedia'
 
 export function HeroCinema() {
   const { t } = useLanguage()
 
   return (
-    <section className="relative overflow-hidden border-b border-[#e2e8f0] bg-[#f8fafc] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pb-20">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:px-8">
+    <section className="relative overflow-hidden border-b border-[#e2e8f0] bg-[linear-gradient(165deg,#f8fafc_0%,#eef5f2_48%,#f8fafc_100%)] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pb-20">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 20% 20%, rgba(26,107,79,0.08), transparent 40%), radial-gradient(circle at 80% 0%, rgba(15,61,46,0.06), transparent 35%)',
+        }}
+      />
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:px-8">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d5e5de] bg-white px-3 py-1.5 text-xs font-semibold text-[#0f3d2e]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#d5e5de] bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#0f3d2e]">
             <BadgeCheck className="h-4 w-4 text-[#1a6b4f]" />
             {t.home.trustLine}
           </div>
 
-          <p className="eyebrow mt-6">{t.home.eyebrow}</p>
+          <p className="eyebrow mt-6">{t.brand.name}</p>
           <h1 className="mt-3 text-[2.2rem] font-bold leading-[1.12] tracking-tight text-[#0f172a] sm:text-5xl lg:text-[3.15rem] text-balance">
             {t.home.heroTitle}{' '}
             <span className="text-[#1a6b4f]">{t.home.heroTitleAccent}</span>
@@ -37,10 +44,9 @@ export function HeroCinema() {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="relative overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#0a2a20] shadow-[0_30px_80px_-40px_rgba(15,61,46,0.55)]">
+        <div>
+          <ProductMedia url="app.collaboratesolutions.com/dashboard">
             <video
-              className="aspect-[16/10] w-full object-cover object-top"
               autoPlay
               muted
               loop
@@ -51,18 +57,21 @@ export function HeroCinema() {
             >
               <source src={ehrMedia.heroVideo} type="video/mp4" />
             </video>
-            <p className="pointer-events-none absolute bottom-12 start-3 rounded bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white sm:bottom-14">
-              Unmute for EHR overview narration
-            </p>
-          </div>
+          </ProductMedia>
+          <p className="mt-2 text-center text-[11px] font-medium text-[#64748b]">
+            Unmute for Collaborate Solutions EHR overview narration · 16:9 product UI
+          </p>
           <div className="mt-3 grid grid-cols-3 gap-2">
-            {[ehrMedia.screens.chart, ehrMedia.screens.schedule, ehrMedia.screens.billing].map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt=""
-                className="aspect-[16/10] w-full border border-[#e2e8f0] object-cover object-top"
-              />
+            {[
+              { src: ehrMedia.screens.chart, url: 'chart' },
+              { src: ehrMedia.screens.schedule, url: 'schedule' },
+              { src: ehrMedia.screens.billing, url: 'billing' },
+            ].map((item) => (
+              <div key={item.url} className="overflow-hidden rounded-lg border border-[#e2e8f0] bg-white">
+                <div className="aspect-video">
+                  <img src={item.src} alt="" className="h-full w-full object-cover object-top" />
+                </div>
+              </div>
             ))}
           </div>
         </div>

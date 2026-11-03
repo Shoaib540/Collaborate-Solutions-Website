@@ -13,7 +13,7 @@ const names = ['dashboard', 'chart', 'schedule', 'billing', 'telehealth', 'inter
 
 const browser = await chromium.launch({ headless: true })
 const page = await browser.newPage({
-  viewport: { width: 1328, height: 780 },
+  viewport: { width: 1400, height: 900 },
   deviceScaleFactor: 2,
 })
 
@@ -22,12 +22,14 @@ await page.goto(`file:///${html.replace(/\\/g, '/')}`, { waitUntil: 'networkidle
 for (const name of names) {
   const el = page.locator(`#${name}`)
   await el.scrollIntoViewIfNeeded()
+  // Exact product frame — fixed 1280×720 in HTML
   await el.screenshot({
     path: join(outDir, `ehr-soft-${name}.jpg`),
     type: 'jpeg',
-    quality: 92,
+    quality: 94,
+    animations: 'disabled',
   })
-  console.log('captured', name)
+  console.log('captured', name, '1280x720 @2x')
 }
 
 await browser.close()

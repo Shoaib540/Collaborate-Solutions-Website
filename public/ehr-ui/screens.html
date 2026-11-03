@@ -2,502 +2,387 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Collaborate Solutions EHR UI</title>
+  <title>Collaborate Solutions EHR — Capture Frames</title>
   <style>
     :root {
-      --bg: #f4f7f6;
-      --panel: #ffffff;
-      --ink: #0f172a;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --teal: #0f766e;
-      --teal-deep: #0f3d2e;
-      --teal-soft: #ecfdf5;
-      --amber: #b45309;
-      --red: #dc2626;
-      --green: #059669;
-      --sidebar: #0b2920;
+      --bg:#f1f5f4; --panel:#fff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+      --teal:#0f766e; --deep:#0f3d2e; --soft:#ecfdf5; --green:#059669; --amber:#d97706; --red:#dc2626; --blue:#0284c7;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Segoe UI", "IBM Plex Sans", system-ui, sans-serif;
-      background: #0a1f18;
-      color: var(--ink);
-      padding: 24px;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Segoe UI",system-ui,sans-serif;background:#061510;color:var(--ink);padding:24px}
+    .shot{
+      width:1280px;height:720px;margin:0 auto 40px;background:var(--bg);
+      border-radius:0;overflow:hidden;display:grid;grid-template-columns:210px 1fr;
     }
-    .shot {
-      width: 1280px;
-      height: 720px;
-      margin: 0 auto 32px;
-      background: var(--bg);
-      border-radius: 10px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      box-shadow: 0 30px 80px rgba(0,0,0,.35);
-    }
-    .side {
-      background: linear-gradient(180deg, #0d3328 0%, #0a241c 100%);
-      color: #d1fae5;
-      padding: 18px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 8px 18px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      margin-bottom: 12px;
-    }
-    .logo {
-      width: 34px; height: 34px; border-radius: 8px;
-      background: linear-gradient(135deg, #14b8a6, #0f766e);
-      display: grid; place-items: center;
-      font-weight: 800; color: white; font-size: 14px;
-    }
-    .brand strong { display: block; font-size: 13px; color: #fff; letter-spacing: -.01em; }
-    .brand span { font-size: 10px; color: #6ee7b7; text-transform: uppercase; letter-spacing: .12em; }
-    .nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 8px;
-      font-size: 13px; color: #a7f3d0; cursor: default;
-    }
-    .nav-item.active { background: rgba(20,184,166,.18); color: #fff; font-weight: 600; }
-    .nav-ico {
-      width: 18px; height: 18px; border-radius: 4px;
-      background: rgba(255,255,255,.12); flex-shrink: 0;
-    }
-    .main { display: flex; flex-direction: column; min-width: 0; }
-    .top {
-      height: 56px; background: var(--panel); border-bottom: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px; gap: 16px;
-    }
-    .crumb { font-size: 13px; color: var(--muted); }
-    .crumb b { color: var(--ink); }
-    .top-right { display: flex; align-items: center; gap: 10px; }
-    .search {
-      width: 260px; height: 34px; border: 1px solid var(--line); border-radius: 8px;
-      background: #f8fafc; padding: 0 12px; font-size: 12px; color: var(--muted);
-      display: flex; align-items: center;
-    }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 999px;
-      background: #ccfbf1; color: var(--teal-deep);
-      display: grid; place-items: center; font-size: 11px; font-weight: 700;
-    }
-    .content { padding: 18px 20px; flex: 1; overflow: hidden; }
-    .row { display: flex; gap: 14px; }
-    .col { flex: 1; min-width: 0; }
-    .card {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-      padding: 14px 16px; margin-bottom: 14px;
-    }
-    .card h3 { font-size: 14px; margin-bottom: 10px; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
-    .stat {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px;
-    }
-    .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .stat .value { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--teal-deep); }
-    .stat .delta { font-size: 11px; color: var(--green); margin-top: 4px; }
-    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    th {
-      text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
-      color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); font-weight: 600;
-    }
-    td { padding: 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-    .pill {
-      display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px;
-      font-size: 11px; font-weight: 600;
-    }
-    .pill.ok { background: #d1fae5; color: #047857; }
-    .pill.warn { background: #fef3c7; color: #b45309; }
-    .pill.bad { background: #fee2e2; color: #b91c1c; }
-    .pill.info { background: #e0f2fe; color: #0369a1; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--teal); color: #fff; border: 0; border-radius: 8px;
-      padding: 8px 12px; font-size: 12px; font-weight: 600;
-    }
-    .btn.ghost { background: #fff; color: var(--teal-deep); border: 1px solid var(--line); }
-    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
-    .title-lg { font-size: 18px; font-weight: 700; }
-    .muted { color: var(--muted); font-size: 12px; }
-    .grid-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .soap label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin: 8px 0 4px; text-transform: uppercase; letter-spacing: .06em; }
-    .soap .box {
-      border: 1px solid var(--line); border-radius: 8px; background: #f8fafc;
-      padding: 10px; font-size: 12.5px; line-height: 1.45; min-height: 52px;
-    }
-    .cal { display: grid; grid-template-columns: 56px repeat(5, 1fr); gap: 6px; }
-    .cal .h { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; padding: 6px; }
-    .slot {
-      border: 1px solid var(--line); border-radius: 8px; background: #fff;
-      min-height: 54px; padding: 6px; font-size: 11px;
-    }
-    .appt {
-      background: var(--teal-soft); border: 1px solid #99f6e4; border-radius: 6px;
-      padding: 6px; color: var(--teal-deep); font-weight: 600; line-height: 1.3;
-    }
-    .appt.gold { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-    .appt.blue { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-    .bar {
-      height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px;
-    }
-    .bar > i { display: block; height: 100%; background: var(--teal); }
-    .video-pane {
-      height: 280px; border-radius: 12px; background: linear-gradient(160deg, #134e4a, #0f172a);
-      display: grid; place-items: center; color: #ccfbf1; position: relative;
-    }
-    .patient-av {
-      width: 96px; height: 96px; border-radius: 999px; background: rgba(255,255,255,.12);
-      border: 2px solid rgba(255,255,255,.25); display: grid; place-items: center;
-      font-size: 28px; font-weight: 700;
-    }
-    .controls {
-      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 8px;
-    }
-    .chip {
-      background: rgba(255,255,255,.14); color: #fff; border-radius: 999px;
-      padding: 8px 12px; font-size: 11px; font-weight: 600;
-    }
-    .chip.danger { background: var(--red); }
-    .list-item {
-      display: flex; justify-content: space-between; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 12.5px;
-    }
-    .tagline {
-      margin-top: auto; padding: 12px 8px 4px; font-size: 10px; color: #5eead4; opacity: .7;
-    }
+    .side{background:linear-gradient(180deg,#0d3328,#081f18);color:#d1fae5;padding:16px 12px;display:flex;flex-direction:column}
+    .brand{display:flex;gap:10px;align-items:center;padding:4px 6px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:10px}
+    .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2dd4bf,#0f766e);display:grid;place-items:center;color:#fff;font-weight:800;font-size:12px}
+    .brand strong{display:block;font-size:12.5px;color:#fff}
+    .brand span{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#5eead4}
+    .nav{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;font-size:12.5px;color:#99f6e4;margin-bottom:2px}
+    .nav.on{background:rgba(45,212,191,.16);color:#fff;font-weight:600}
+    .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25)}
+    .nav.on .dot{background:#2dd4bf}
+    .foot{margin-top:auto;font-size:10px;color:#5eead4;opacity:.65;padding:8px 6px}
+    .main{display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+    .top{height:52px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+    .crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--ink)}
+    .right{display:flex;gap:8px;align-items:center}
+    .search{width:240px;height:32px;border:1px solid var(--line);border-radius:8px;background:#f8fafc;padding:0 10px;font-size:12px;color:var(--muted);display:flex;align-items:center}
+    .av{width:30px;height:30px;border-radius:999px;background:#ccfbf1;color:var(--deep);display:grid;place-items:center;font-size:10px;font-weight:700}
+    .btn{background:var(--teal);color:#fff;border:0;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:600}
+    .btn.g{background:#fff;color:var(--deep);border:1px solid var(--line)}
+    .body{padding:14px 16px;flex:1;overflow:hidden}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
+    .stat .l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+    .stat .v{font-size:22px;font-weight:700;color:var(--deep);margin-top:2px}
+    .stat .d{font-size:11px;color:var(--green);margin-top:2px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+    .card h3{font-size:13px;margin-bottom:8px}
+    .grid2{display:grid;grid-template-columns:1.35fr .85fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+    td{padding:8px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+    .pill{display:inline-flex;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:700}
+    .ok{background:#d1fae5;color:#047857}.warn{background:#fef3c7;color:#b45309}.bad{background:#fee2e2;color:#b91c1c}.info{background:#e0f2fe;color:#0369a1}
+    .muted{color:var(--muted);font-size:11px}
+    .chart-box{height:160px;position:relative}
+    .bar-row{display:flex;align-items:stretch;gap:8px;height:130px;padding-top:4px}
+    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-height:0}
+    .bar{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#14b8a6,#0f766e);flex-shrink:0}
+    .bar.soft{background:linear-gradient(180deg,#99f6e4,#5eead4)}
+    .bar-col span{font-size:9px;color:var(--muted);flex-shrink:0}
+    .line-wrap{height:140px}
+    .spark{display:flex;gap:3px;align-items:flex-end;height:36px;margin-top:6px}
+    .spark i{flex:1;border-radius:2px;background:#99f6e4}
+    .soap label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:6px 0 3px}
+    .box{border:1px solid var(--line);border-radius:8px;background:#f8fafc;padding:8px 10px;font-size:12px;line-height:1.4;min-height:44px}
+    .cal{display:grid;grid-template-columns:48px repeat(5,1fr);gap:5px}
+    .cal .h{font-size:10px;font-weight:700;color:var(--muted);text-align:center;padding:4px}
+    .slot{border:1px solid var(--line);border-radius:7px;background:#fff;min-height:48px;padding:4px;font-size:10px}
+    .appt{background:var(--soft);border:1px solid #99f6e4;border-radius:5px;padding:5px;color:var(--deep);font-weight:600;line-height:1.25}
+    .appt.g{background:#fffbeb;border-color:#fde68a;color:#92400e}
+    .appt.b{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+    .video{height:250px;border-radius:10px;background:linear-gradient(160deg,#134e4a,#0f172a);display:grid;place-items:center;color:#ccfbf1;position:relative}
+    .pav{width:84px;height:84px;border-radius:999px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.22);display:grid;place-items:center;font-size:24px;font-weight:700}
+    .ctrls{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+    .chip{background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:6px 10px;font-size:10px;font-weight:600}
+    .chip.d{background:var(--red)}
+    .list{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .donut-wrap{display:flex;align-items:center;gap:14px}
+    .legend{font-size:11px;color:var(--muted)}.legend b{color:var(--ink)}
   </style>
 </head>
 <body>
 
-  <!-- 1 DASHBOARD -->
-  <section class="shot" id="dashboard" data-name="dashboard">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+<section class="shot" id="dashboard">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav on"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav"><span class="dot"></span>Charting</div>
+    <div class="nav"><span class="dot"></span>Schedule</div>
+    <div class="nav"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav"><span class="dot"></span>Telehealth</div>
+    <div class="nav"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Clinical Analytics</b> · Live</div><div class="right"><div class="search">Search patients, KPIs…</div><div class="av">DR</div></div></div>
+    <div class="body">
+      <div class="stats">
+        <div class="stat"><div class="l">Visits today</div><div class="v">42</div><div class="d">+14% vs avg</div><div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i style="height:62%"></i><i style="height:88%"></i><i style="height:76%"></i></div></div>
+        <div class="stat"><div class="l">Clean claims</div><div class="v">96%</div><div class="d">Target 94%</div><div class="spark"><i style="height:60%"></i><i style="height:65%"></i><i style="height:70%"></i><i style="height:68%"></i><i style="height:80%"></i><i style="height:85%"></i><i style="height:92%"></i></div></div>
+        <div class="stat"><div class="l">Unsigned notes</div><div class="v">3</div><div class="d" style="color:var(--amber)">Due before 6pm</div></div>
+        <div class="stat"><div class="l">NPHIES</div><div class="v" style="font-size:16px;margin-top:8px">Connected</div><div class="d">Eligibility live</div></div>
       </div>
-      <div class="nav-item active"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Clinical Dashboard</b> · Today</div>
-        <div class="top-right">
-          <div class="search">Search patients, MRN, claims…</div>
-          <div class="avatar">DR</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="toolbar"><h3>Encounters by day</h3><span class="muted">Last 7 days</span></div>
+          <div class="bar-row">
+            <div class="bar-col"><div class="bar" style="height:55%"></div><span>Mon</span></div>
+            <div class="bar-col"><div class="bar soft" style="height:70%"></div><span>Tue</span></div>
+            <div class="bar-col"><div class="bar" style="height:48%"></div><span>Wed</span></div>
+            <div class="bar-col"><div class="bar" style="height:82%"></div><span>Thu</span></div>
+            <div class="bar-col"><div class="bar soft" style="height:64%"></div><span>Fri</span></div>
+            <div class="bar-col"><div class="bar" style="height:38%"></div><span>Sat</span></div>
+            <div class="bar-col"><div class="bar" style="height:90%"></div><span>Sun</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Quality & revenue mix</h3>
+          <div class="donut-wrap" style="margin-top:8px">
+            <svg width="120" height="120" viewBox="0 0 42 42">
+              <circle cx="21" cy="21" r="15.5" fill="transparent" stroke="#e2e8f0" stroke-width="5"/>
+              <circle cx="21" cy="21" r="15.5" fill="transparent" stroke="#0f766e" stroke-width="5" stroke-dasharray="55 45" stroke-dashoffset="25"/>
+              <circle cx="21" cy="21" r="15.5" fill="transparent" stroke="#14b8a6" stroke-width="5" stroke-dasharray="25 75" stroke-dashoffset="-30"/>
+              <circle cx="21" cy="21" r="15.5" fill="transparent" stroke="#fbbf24" stroke-width="5" stroke-dasharray="12 88" stroke-dashoffset="-55"/>
+            </svg>
+            <div>
+              <div class="legend"><b style="color:#0f766e">●</b> Office visits 55%</div>
+              <div class="legend" style="margin-top:6px"><b style="color:#14b8a6">●</b> Telehealth 25%</div>
+              <div class="legend" style="margin-top:6px"><b style="color:#fbbf24">●</b> RPM / CCM 12%</div>
+              <div class="legend" style="margin-top:6px"><b style="color:#94a3b8">●</b> Other 8%</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="content">
-        <div class="stats">
-          <div class="stat"><div class="label">Today’s visits</div><div class="value">42</div><div class="delta">+6 vs yesterday</div></div>
-          <div class="stat"><div class="label">Open charts</div><div class="value">11</div><div class="delta">3 unsigned</div></div>
-          <div class="stat"><div class="label">Claims ready</div><div class="value">28</div><div class="delta">96% clean</div></div>
-          <div class="stat"><div class="label">NPHIES status</div><div class="value" style="font-size:18px;margin-top:10px">Connected</div><div class="delta">Eligibility live</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="shot" id="chart">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav on"><span class="dot"></span>Charting</div>
+    <div class="nav"><span class="dot"></span>Schedule</div>
+    <div class="nav"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav"><span class="dot"></span>Telehealth</div>
+    <div class="nav"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Patient Chart</b> · MRN 10482 · Barbara Johnson</div><div class="right"><button class="btn g">eRx</button><button class="btn">Sign note</button><div class="av">DR</div></div></div>
+    <div class="body">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+        <span class="pill ok">Active</span><span class="muted">DOB 14 May 1958 · F · PCP Dr. Reed</span>
+        <span class="pill warn">Allergy: Penicillin</span><span class="pill info">HTN · T2DM</span>
+      </div>
+      <div class="grid2">
+        <div class="card soap">
+          <div class="toolbar"><h3 style="margin:0;font-size:15px">SOAP · Office visit</h3><button class="btn g">Templates</button></div>
+          <label>Subjective</label><div class="box">Improved BP on current regimen. Occasional morning headache. Med adherent. No chest pain.</div>
+          <label>Objective</label><div class="box">BP 128/78 · HR 72 · BMI 27.4 · Lungs clear · Heart RRR</div>
+          <label>Assessment / Plan</label><div class="box">1. HTN — continue losartan 50mg. 2. T2DM — A1c pending. Labs in 3 months.</div>
         </div>
-        <div class="grid-2">
+        <div>
           <div class="card">
-            <div class="toolbar"><h3>Waiting room</h3><button class="btn">Check in</button></div>
-            <table>
-              <thead><tr><th>Patient</th><th>Reason</th><th>Provider</th><th>Wait</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td>Sara Al-Harbi</td><td>Follow-up HTN</td><td>Dr. Khan</td><td>4 min</td><td><span class="pill ok">Ready</span></td></tr>
-                <tr><td>James Ortiz</td><td>New patient</td><td>Dr. Reed</td><td>9 min</td><td><span class="pill warn">Intake</span></td></tr>
-                <tr><td>Layla Hassan</td><td>Lab review</td><td>Dr. Khan</td><td>2 min</td><td><span class="pill ok">Ready</span></td></tr>
-                <tr><td>Michael Chen</td><td>Wound check</td><td>Dr. Patel</td><td>12 min</td><td><span class="pill info">Room 3</span></td></tr>
-              </tbody>
-            </table>
+            <h3>BP trend (mmHg)</h3>
+            <svg class="line-wrap" width="100%" height="130" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,20 320,20"/>
+              <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,55 320,55"/>
+              <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,90 320,90"/>
+              <polyline fill="rgba(15,118,110,.12)" stroke="#0f766e" stroke-width="2.5" points="10,85 60,70 110,78 160,52 210,48 260,40 310,35"/>
+              <polyline fill="none" stroke="#14b8a6" stroke-width="2" stroke-dasharray="4 3" points="10,100 60,92 110,95 160,80 210,78 260,72 310,68"/>
+            </svg>
+            <div class="muted">Systolic · Diastolic · Goal &lt;130</div>
           </div>
-          <div class="card">
-            <h3>Tasks</h3>
-            <div class="list-item"><span>Sign 3 encounter notes</span><span class="pill warn">Due</span></div>
-            <div class="list-item"><span>Review abnormal labs (2)</span><span class="pill bad">Urgent</span></div>
-            <div class="list-item"><span>Prior auth · MRI lumbar</span><span class="pill info">Pending</span></div>
-            <div class="list-item"><span>MIPS quality measure Q138</span><span class="pill ok">On track</span></div>
+          <div class="card" style="margin-top:10px">
+            <h3>Medications</h3>
+            <div class="list"><span>Losartan 50 mg</span><span class="pill ok">Active</span></div>
+            <div class="list"><span>Metformin 500 BID</span><span class="pill ok">Active</span></div>
+            <div class="list"><span>Atorvastatin 20</span><span class="pill ok">Active</span></div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 2 CHART -->
-  <section class="shot" id="chart" data-name="chart">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+<section class="shot" id="schedule">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav"><span class="dot"></span>Charting</div>
+    <div class="nav on"><span class="dot"></span>Schedule</div>
+    <div class="nav"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav"><span class="dot"></span>Telehealth</div>
+    <div class="nav"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Practice Schedule</b> · Week of Mar 10</div><div class="right"><button class="btn g">Providers</button><button class="btn">New appt</button><div class="av">FD</div></div></div>
+    <div class="body">
+      <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat"><div class="l">Filled slots</div><div class="v">87%</div><div class="d">+5% vs last week</div></div>
+        <div class="stat"><div class="l">No-show risk</div><div class="v">4</div><div class="d" style="color:var(--amber)">SMS reminders queued</div></div>
+        <div class="stat"><div class="l">Tele slots</div><div class="v">12</div><div class="d">Today</div></div>
       </div>
-      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item active"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Patient Chart</b> · MRN 10482 · Barbara Johnson</div>
-        <div class="top-right"><button class="btn ghost">eRx</button><button class="btn">Sign &amp; close</button><div class="avatar">DR</div></div>
-      </div>
-      <div class="content">
-        <div class="row" style="margin-bottom:12px;gap:10px;flex-wrap:wrap">
-          <span class="pill ok">Active</span>
-          <span class="muted">DOB 14 May 1958 · F · PCP Dr. Reed</span>
-          <span class="pill warn">Allergy: Penicillin</span>
-          <span class="pill info">HTN · T2DM</span>
-        </div>
-        <div class="grid-2">
-          <div class="card soap">
-            <div class="toolbar"><div class="title-lg">SOAP note · Office visit</div><button class="btn ghost">Templates</button></div>
-            <label>Subjective</label>
-            <div class="box">Patient reports improved BP control on current regimen. Occasional morning headache. Adherent to meds. No chest pain or dyspnea.</div>
-            <label>Objective</label>
-            <div class="box">BP 128/78 · HR 72 · BMI 27.4 · Lungs clear · Heart RRR · Extremities no edema</div>
-            <label>Assessment / Plan</label>
-            <div class="box">1. Essential hypertension — continue losartan 50mg daily. 2. T2DM — A1c pending. Recheck labs in 3 months. RTC sooner if headaches worsen.</div>
-          </div>
-          <div>
-            <div class="card">
-              <h3>Medications</h3>
-              <div class="list-item"><span>Losartan 50 mg daily</span><span class="pill ok">Active</span></div>
-              <div class="list-item"><span>Metformin 500 mg BID</span><span class="pill ok">Active</span></div>
-              <div class="list-item"><span>Atorvastatin 20 mg</span><span class="pill ok">Active</span></div>
-            </div>
-            <div class="card">
-              <h3>Vitals trend</h3>
-              <div class="muted">Systolic BP (last 6 visits)</div>
-              <div class="bar"><i style="width:78%"></i></div>
-              <div class="muted" style="margin-top:8px">Average 131 mmHg · Goal &lt;130</div>
-            </div>
-          </div>
+      <div class="card">
+        <div class="cal">
+          <div class="h"></div><div class="h">Mon</div><div class="h">Tue</div><div class="h">Wed</div><div class="h">Thu</div><div class="h">Fri</div>
+          <div class="h">9:00</div>
+          <div class="slot"><div class="appt">Ortiz · NP</div></div>
+          <div class="slot"><div class="appt g">Tele · Ali</div></div>
+          <div class="slot"><div class="appt">Johnson · FU</div></div>
+          <div class="slot"></div>
+          <div class="slot"><div class="appt b">Hassan · Labs</div></div>
+          <div class="h">10:00</div>
+          <div class="slot"><div class="appt b">Chen · Wound</div></div>
+          <div class="slot"><div class="appt">Reed block</div></div>
+          <div class="slot"></div>
+          <div class="slot"><div class="appt g">Tele · Park</div></div>
+          <div class="slot"><div class="appt">New · Diaz</div></div>
+          <div class="h">11:00</div>
+          <div class="slot"></div>
+          <div class="slot"><div class="appt">Khan · Cardio</div></div>
+          <div class="slot"><div class="appt">Al-Harbi</div></div>
+          <div class="slot"><div class="appt b">CCM call</div></div>
+          <div class="slot"></div>
+          <div class="h">13:00</div>
+          <div class="slot"><div class="appt g">Tele · RPM</div></div>
+          <div class="slot"></div>
+          <div class="slot"><div class="appt">Patel · Derm</div></div>
+          <div class="slot"><div class="appt">Walk-in</div></div>
+          <div class="slot"><div class="appt g">NPHIES auth</div></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 3 SCHEDULE -->
-  <section class="shot" id="schedule" data-name="schedule">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+<section class="shot" id="billing">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav"><span class="dot"></span>Charting</div>
+    <div class="nav"><span class="dot"></span>Schedule</div>
+    <div class="nav on"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav"><span class="dot"></span>Telehealth</div>
+    <div class="nav"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Revenue Cycle</b> · Claims & collections</div><div class="right"><div class="search">Claim ID / payer…</div><div class="av">RC</div></div></div>
+    <div class="body">
+      <div class="stats">
+        <div class="stat"><div class="l">Clean claim rate</div><div class="v">96%</div><div class="d">+2.1% MoM</div></div>
+        <div class="stat"><div class="l">AR &gt; 60 days</div><div class="v">8%</div><div class="d">Target &lt;10%</div></div>
+        <div class="stat"><div class="l">Denials open</div><div class="v">14</div><div class="d" style="color:var(--amber)">4 high priority</div></div>
+        <div class="stat"><div class="l">Collected MTD</div><div class="v" style="font-size:20px">$184k</div><div class="d">US + NPHIES</div></div>
       </div>
-      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item active"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Practice Scheduling</b> · Week of Mar 10</div>
-        <div class="top-right"><button class="btn ghost">Providers</button><button class="btn">New appointment</button><div class="avatar">FD</div></div>
-      </div>
-      <div class="content">
+      <div class="grid2">
         <div class="card">
-          <div class="cal">
-            <div class="h"></div><div class="h">Mon</div><div class="h">Tue</div><div class="h">Wed</div><div class="h">Thu</div><div class="h">Fri</div>
-            <div class="h">9:00</div>
-            <div class="slot"><div class="appt">Ortiz · NP</div></div>
-            <div class="slot"><div class="appt gold">Tele · Ali</div></div>
-            <div class="slot"><div class="appt">Johnson · FU</div></div>
-            <div class="slot"></div>
-            <div class="slot"><div class="appt blue">Hassan · Labs</div></div>
-            <div class="h">10:00</div>
-            <div class="slot"><div class="appt blue">Chen · Wound</div></div>
-            <div class="slot"><div class="appt">Reed block</div></div>
-            <div class="slot"></div>
-            <div class="slot"><div class="appt gold">Tele · Park</div></div>
-            <div class="slot"><div class="appt">New · Diaz</div></div>
-            <div class="h">11:00</div>
-            <div class="slot"></div>
-            <div class="slot"><div class="appt">Khan · Cardio</div></div>
-            <div class="slot"><div class="appt">Al-Harbi</div></div>
-            <div class="slot"><div class="appt blue">CCM call</div></div>
-            <div class="slot"></div>
-            <div class="h">13:00</div>
-            <div class="slot"><div class="appt gold">Tele · RPM</div></div>
-            <div class="slot"></div>
-            <div class="slot"><div class="appt">Patel · Derm</div></div>
-            <div class="slot"><div class="appt">Walk-in</div></div>
-            <div class="slot"><div class="appt gold">NPHIES auth</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4 BILLING -->
-  <section class="shot" id="billing" data-name="billing">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
-      </div>
-      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item active"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Revenue Cycle</b> · Claims worklist</div>
-        <div class="top-right"><div class="search">Search claim ID or payer…</div><div class="avatar">RC</div></div>
-      </div>
-      <div class="content">
-        <div class="stats">
-          <div class="stat"><div class="label">Clean claim rate</div><div class="value">96%</div><div class="delta">+2.1% MoM</div></div>
-          <div class="stat"><div class="label">AR &gt; 60 days</div><div class="value">8%</div><div class="delta">Target &lt;10%</div></div>
-          <div class="stat"><div class="label">Denials open</div><div class="value">14</div><div class="delta">4 high priority</div></div>
-          <div class="stat"><div class="label">Collected MTD</div><div class="value" style="font-size:22px">$184k</div><div class="delta">US + NPHIES</div></div>
+          <div class="toolbar"><h3>Collections trend</h3><span class="muted">12 weeks</span></div>
+          <svg width="100%" height="150" viewBox="0 0 480 150" preserveAspectRatio="none">
+            <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,30 480,30"/>
+            <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,75 480,75"/>
+            <polyline fill="none" stroke="#e2e8f0" stroke-width="1" points="0,120 480,120"/>
+            <polyline fill="rgba(15,118,110,.1)" stroke="#0f766e" stroke-width="2.5"
+              points="0,110 40,100 80,95 120,88 160,92 200,70 240,65 280,58 320,55 360,48 400,42 440,38 480,30"/>
+          </svg>
         </div>
         <div class="card">
-          <div class="toolbar"><h3>Claims</h3><button class="btn">Submit batch</button></div>
-          <table>
-            <thead><tr><th>Claim</th><th>Patient</th><th>Payer</th><th>CPT</th><th>Amount</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>CL-98211</td><td>Barbara Johnson</td><td>Aetna</td><td>99214</td><td>$186</td><td><span class="pill ok">Paid</span></td></tr>
-              <tr><td>CL-98234</td><td>Sara Al-Harbi</td><td>Bupa Arabia</td><td>99213</td><td>SAR 320</td><td><span class="pill info">Submitted</span></td></tr>
-              <tr><td>CL-98240</td><td>James Ortiz</td><td>UHC</td><td>99204</td><td>$248</td><td><span class="pill warn">Scrub</span></td></tr>
-              <tr><td>CL-98251</td><td>Michael Chen</td><td>Medicare</td><td>11042</td><td>$412</td><td><span class="pill bad">Denied</span></td></tr>
-              <tr><td>CL-98260</td><td>Layla Hassan</td><td>NPHIES</td><td>80053</td><td>SAR 145</td><td><span class="pill ok">Paid</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5 TELEHEALTH -->
-  <section class="shot" id="telehealth" data-name="telehealth">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
-      </div>
-      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item active"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Telehealth</b> · Visit VIS-784512 in progress</div>
-        <div class="top-right"><span class="pill ok">Connected</span><div class="avatar">DR</div></div>
-      </div>
-      <div class="content">
-        <div class="grid-2">
-          <div>
-            <div class="video-pane">
-              <div style="text-align:center">
-                <div class="patient-av">JA</div>
-                <div style="margin-top:10px;font-size:13px">John Anderson · Connected</div>
-                <div class="muted" style="color:#99f6e4">08:24 · Hypertension follow-up</div>
-              </div>
-              <div class="controls">
-                <span class="chip">Mute</span>
-                <span class="chip">Camera</span>
-                <span class="chip">Share</span>
-                <span class="chip danger">End visit</span>
-              </div>
-            </div>
-            <div class="card" style="margin-top:12px">
-              <div class="toolbar"><h3>Quick actions</h3></div>
-              <div class="row" style="gap:8px">
-                <button class="btn ghost">Order labs</button>
-                <button class="btn ghost">ePrescribe</button>
-                <button class="btn ghost">Add problem</button>
-              </div>
-            </div>
-          </div>
-          <div class="card soap">
-            <h3>Clinical notes</h3>
-            <label>Subjective</label>
-            <div class="box">Doing well on meds. Home BP readings 120–130 systolic.</div>
-            <label>Plan</label>
-            <div class="box">Continue current therapy. Send portal summary. Schedule 3-month follow-up.</div>
-            <div style="margin-top:14px">
-              <h3 style="margin-bottom:8px">Waiting room</h3>
-              <div class="list-item"><span>S. Mitchell · 2 min</span><span class="pill warn">Waiting</span></div>
-              <div class="list-item"><span>D. Rodriguez · 5 min</span><span class="pill warn">Waiting</span></div>
-            </div>
+          <h3>Denial reasons</h3>
+          <div style="margin-top:8px">
+            <div class="muted" style="margin-bottom:4px">Eligibility 38%</div>
+            <div style="height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden"><div style="width:38%;height:100%;background:#0f766e"></div></div>
+            <div class="muted" style="margin:10px 0 4px">Coding 27%</div>
+            <div style="height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden"><div style="width:27%;height:100%;background:#14b8a6"></div></div>
+            <div class="muted" style="margin:10px 0 4px">Auth 21%</div>
+            <div style="height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden"><div style="width:21%;height:100%;background:#fbbf24"></div></div>
+            <div class="muted" style="margin:10px 0 4px">Other 14%</div>
+            <div style="height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden"><div style="width:14%;height:100%;background:#94a3b8"></div></div>
           </div>
         </div>
       </div>
+      <div class="card" style="margin-top:10px;padding-top:8px;padding-bottom:4px">
+        <table>
+          <thead><tr><th>Claim</th><th>Patient</th><th>Payer</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>CL-98211</td><td>B. Johnson</td><td>Aetna</td><td>$186</td><td><span class="pill ok">Paid</span></td></tr>
+            <tr><td>CL-98234</td><td>S. Al-Harbi</td><td>Bupa / NPHIES</td><td>SAR 320</td><td><span class="pill info">Submitted</span></td></tr>
+            <tr><td>CL-98251</td><td>M. Chen</td><td>Medicare</td><td>$412</td><td><span class="pill bad">Denied</span></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 6 INTEROP -->
-  <section class="shot" id="interop" data-name="interop">
-    <aside class="side">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
-      </div>
-      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
-      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
-      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
-      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
-      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
-      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
-      <div class="nav-item active"><div class="nav-ico"></div>Exchange</div>
-      <div class="tagline">© Collaborate Solutions</div>
-    </aside>
-    <div class="main">
-      <div class="top">
-        <div class="crumb"><b>Interoperability</b> · FHIR R4 · NPHIES · HL7</div>
-        <div class="top-right"><span class="pill ok">All systems operational</span><div class="avatar">IT</div></div>
-      </div>
-      <div class="content">
-        <div class="grid-3" style="margin-bottom:14px">
-          <div class="card"><div class="label muted">NPHIES</div><div class="title-lg" style="margin-top:6px">Connected</div><div class="muted" style="margin-top:6px">Eligibility · Claims · Pre-auth</div><div class="bar"><i style="width:100%;background:var(--green)"></i></div></div>
-          <div class="card"><div class="label muted">HL7 FHIR R4</div><div class="title-lg" style="margin-top:6px">API live</div><div class="muted" style="margin-top:6px">Patient · Encounter · Claim</div><div class="bar"><i style="width:94%"></i></div></div>
-          <div class="card"><div class="label muted">eRx network</div><div class="title-lg" style="margin-top:6px">Online</div><div class="muted" style="margin-top:6px">EPCS · Benefit check</div><div class="bar"><i style="width:98%;background:var(--green)"></i></div></div>
+<section class="shot" id="telehealth">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav"><span class="dot"></span>Charting</div>
+    <div class="nav"><span class="dot"></span>Schedule</div>
+    <div class="nav"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav on"><span class="dot"></span>Telehealth</div>
+    <div class="nav"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Telehealth</b> · VIS-784512</div><div class="right"><span class="pill ok">Connected</span><div class="av">DR</div></div></div>
+    <div class="body">
+      <div class="grid2">
+        <div>
+          <div class="video">
+            <div style="text-align:center"><div class="pav">JA</div><div style="margin-top:8px;font-size:13px">John Anderson</div><div class="muted" style="color:#99f6e4">08:24 · HTN follow-up</div></div>
+            <div class="ctrls"><span class="chip">Mute</span><span class="chip">Camera</span><span class="chip">Share</span><span class="chip d">End</span></div>
+          </div>
+          <div class="card" style="margin-top:10px"><div class="toolbar"><h3 style="margin:0">Quick actions</h3></div>
+            <div style="display:flex;gap:6px"><button class="btn g">Order labs</button><button class="btn g">ePrescribe</button><button class="btn g">Add problem</button></div>
+          </div>
         </div>
-        <div class="card">
-          <div class="toolbar"><h3>Exchange activity today</h3><button class="btn ghost">Developer portal</button></div>
-          <table>
-            <thead><tr><th>Channel</th><th>Messages</th><th>Success</th><th>Latency</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>NPHIES Eligibility</td><td>1,248</td><td>99.4%</td><td>180 ms</td><td><span class="pill ok">Healthy</span></td></tr>
-              <tr><td>FHIR Patient Access</td><td>642</td><td>99.8%</td><td>95 ms</td><td><span class="pill ok">Healthy</span></td></tr>
-              <tr><td>Lab ORU results</td><td>318</td><td>98.1%</td><td>220 ms</td><td><span class="pill warn">Watch</span></td></tr>
-              <tr><td>QRDA-III MIPS export</td><td>12</td><td>100%</td><td>—</td><td><span class="pill ok">Ready</span></td></tr>
-            </tbody>
-          </table>
+        <div class="card soap">
+          <h3>Clinical notes</h3>
+          <label>Subjective</label><div class="box">Home BP 120–130 systolic. Doing well on meds.</div>
+          <label>Plan</label><div class="box">Continue therapy. Portal summary. 3-month follow-up.</div>
+          <h3 style="margin-top:12px">Waiting room</h3>
+          <div class="list"><span>S. Mitchell · 2 min</span><span class="pill warn">Waiting</span></div>
+          <div class="list"><span>D. Rodriguez · 5 min</span><span class="pill warn">Waiting</span></div>
+          <div class="list"><span>L. Chen · 7 min</span><span class="pill info">Intake done</span></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<section class="shot" id="interop">
+  <aside class="side">
+    <div class="brand"><div class="logo">CS</div><div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div></div>
+    <div class="nav"><span class="dot"></span>Dashboard</div>
+    <div class="nav"><span class="dot"></span>Patients</div>
+    <div class="nav"><span class="dot"></span>Charting</div>
+    <div class="nav"><span class="dot"></span>Schedule</div>
+    <div class="nav"><span class="dot"></span>Billing</div>
+    <div class="nav"><span class="dot"></span>Analytics</div>
+    <div class="nav"><span class="dot"></span>Telehealth</div>
+    <div class="nav on"><span class="dot"></span>Exchange</div>
+    <div class="foot">© Collaborate Solutions</div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><b>Interoperability</b> · FHIR R4 · NPHIES · HL7</div><div class="right"><span class="pill ok">All systems operational</span><div class="av">IT</div></div></div>
+    <div class="body">
+      <div class="grid3" style="margin-bottom:12px">
+        <div class="card"><div class="muted">NPHIES</div><div style="font-size:18px;font-weight:700;margin-top:4px;color:var(--deep)">Connected</div><div class="muted" style="margin-top:4px">Eligibility · Claims · Pre-auth</div>
+          <div style="height:6px;background:#e2e8f0;border-radius:99px;margin-top:10px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
+        </div>
+        <div class="card"><div class="muted">HL7 FHIR R4</div><div style="font-size:18px;font-weight:700;margin-top:4px;color:var(--deep)">API live</div><div class="muted" style="margin-top:4px">Patient · Encounter · Claim</div>
+          <div style="height:6px;background:#e2e8f0;border-radius:99px;margin-top:10px;overflow:hidden"><div style="width:94%;height:100%;background:var(--teal)"></div></div>
+        </div>
+        <div class="card"><div class="muted">Message volume</div><div style="font-size:18px;font-weight:700;margin-top:4px;color:var(--deep)">2,220</div><div class="muted" style="margin-top:4px">Today · 99.4% success</div>
+          <div class="spark" style="height:28px"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:85%"></i><i style="height:75%"></i></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="toolbar"><h3>Exchange activity</h3><button class="btn g">Developer portal</button></div>
+        <table>
+          <thead><tr><th>Channel</th><th>Messages</th><th>Success</th><th>Latency</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>NPHIES Eligibility</td><td>1,248</td><td>99.4%</td><td>180 ms</td><td><span class="pill ok">Healthy</span></td></tr>
+            <tr><td>FHIR Patient Access</td><td>642</td><td>99.8%</td><td>95 ms</td><td><span class="pill ok">Healthy</span></td></tr>
+            <tr><td>Lab ORU results</td><td>318</td><td>98.1%</td><td>220 ms</td><td><span class="pill warn">Watch</span></td></tr>
+            <tr><td>QRDA-III MIPS</td><td>12</td><td>100%</td><td>—</td><td><span class="pill ok">Ready</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>

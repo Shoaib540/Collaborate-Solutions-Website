@@ -143,7 +143,9 @@ ff([
   finalMp4,
 ])
 
-ff(['-y', '-i', finalMp4, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '36', '-c:a', 'libopus', '-b:a', '128k', finalWebm])
-
 console.log('Wrote', finalMp4)
-console.log('Wrote', finalWebm)
+// WebM optional — skip by default (slow). Re-enable if needed.
+if (process.env.BUILD_WEBM === '1') {
+  ff(['-y', '-i', finalMp4, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '36', '-c:a', 'libopus', '-b:a', '128k', finalWebm])
+  console.log('Wrote', finalWebm)
+}

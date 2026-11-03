@@ -134,72 +134,63 @@ export function Healthcare() {
   return (
     <div className="bg-white">
       <Seo title={t.ehr.seoTitle} description={t.ehr.seoDesc} path="/ehr" />
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-[#e2e8f0] bg-[#f8fafc] pt-28 pb-16 sm:pt-32 sm:pb-20">
-        <div className="absolute inset-0 opacity-25">
-          <video
-            className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={ehrMedia.productHero}
-          >
-            <source src={ehrMedia.clinicVideo} type="video/mp4" />
-            <source src={ehrMedia.ambientVideo} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-[linear-gradient(100deg,#f8fafc_10%,rgba(248,250,252,0.92)_55%,rgba(248,250,252,0.78)_100%)]" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d5e5de] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#0f3d2e]">
-            <BadgeCheck className="h-4 w-4" />
-            {t.home.trustLine}
-          </div>
-          <p className="eyebrow mt-5">{t.ehr.eyebrow}</p>
-          <h1 className="mt-3 max-w-4xl text-4xl font-bold leading-[1.12] tracking-tight text-[#0f172a] sm:text-5xl lg:text-6xl">
-            {t.ehr.title}
-          </h1>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-[#475569] sm:text-lg">
-            {t.ehr.body}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {['ONC 2015 Edition Cures Update', 'CMS MIPS Qualified Registry', 'HL7® FHIR® R4 Validated'].map(
-              (badge) => (
+      {/* PRODUCT HERO — distinct from Home marketing landing */}
+      <section className="border-b border-[#e2e8f0] bg-[#f8fafc] pt-28 pb-14 sm:pt-32 sm:pb-18">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#d5e5de] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#0f3d2e]">
+              <BadgeCheck className="h-4 w-4" />
+              {t.home.trustLine}
+            </div>
+            <p className="eyebrow mt-5">{t.ehr.eyebrow}</p>
+            <h1 className="mt-3 text-3xl font-bold leading-[1.12] tracking-tight text-[#0f172a] sm:text-4xl lg:text-5xl">
+              {t.ehr.title}
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-[#475569]">
+              {t.ehr.body}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {['ONC Cures Update', 'CMS MIPS Registry', 'HL7 FHIR R4', 'Saudi NPHIES'].map((badge) => (
                 <span
                   key={badge}
-                  className="inline-flex items-center gap-2 rounded-md border border-[#e2e8f0] bg-white px-3 py-1.5 text-xs font-bold text-[#0f3d2e]"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-[#e2e8f0] bg-white px-2.5 py-1 text-[11px] font-bold text-[#0f3d2e]"
                 >
                   <BadgeCheck className="h-3.5 w-3.5" />
                   {badge}
                 </span>
-              ),
-            )}
+              ))}
+            </div>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <DemoButton className="btn-primary">{t.cta.demo}</DemoButton>
+              <a href="#solutions" className="btn-ghost">
+                Browse modules
+              </a>
+            </div>
           </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <DemoButton className="btn-primary">{t.cta.demo}</DemoButton>
-            <a href="#certifications" className="btn-ghost">
-              {t.cta.viewCerts}
-            </a>
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 border-t border-[#e2e8f0] pt-6 text-xs font-semibold text-[#334155] sm:grid-cols-4 sm:text-sm">
-            {['EHR & PMS Integrated', 'Telehealth & RPM', 'CCM / BHI / CoCM', 'MIPS & NPHIES Ready'].map(
-              (item) => (
-                <div key={item} className="flex items-center gap-2 rounded-md border border-[#e2e8f0] bg-white p-2.5">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#1a6b4f]" />
-                  {item}
-                </div>
-              ),
-            )}
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {heroStats.map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-[#e2e8f0] bg-white p-4 text-center">
-                <div className="text-2xl font-bold text-[#0f3d2e] sm:text-3xl">{stat.value}</div>
-                <div className="mt-1 text-xs font-bold text-[#0f172a] sm:text-sm">{stat.label}</div>
-                <div className="text-[11px] text-[#64748b]">{stat.sub}</div>
+          <div>
+            <div className="overflow-hidden rounded-xl border border-[#e2e8f0] bg-white shadow-[0_28px_70px_-40px_rgba(15,61,46,0.5)]">
+              <div className="flex h-9 items-center gap-1.5 border-b border-[#e2e8f0] bg-[#f1f5f4] px-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#f87171]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#fbbf24]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#34d399]" />
+                <span className="ms-2 text-[10px] font-medium text-[#64748b]">app.collaboratesolutions.com/ehr</span>
               </div>
-            ))}
+              <div className="aspect-video">
+                <img
+                  src={ehrMedia.screens.dashboard}
+                  alt="Collaborate Solutions EHR analytics dashboard"
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {heroStats.map((stat) => (
+                <div key={stat.label} className="rounded-lg border border-[#e2e8f0] bg-white p-3 text-center">
+                  <div className="text-xl font-bold text-[#0f3d2e]">{stat.value}</div>
+                  <div className="mt-0.5 text-[10px] font-bold text-[#0f172a]">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
