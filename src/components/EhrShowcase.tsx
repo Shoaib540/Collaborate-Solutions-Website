@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
 import { ArrowRight, MonitorSmartphone } from 'lucide-react'
 import { ehrMedia } from '../data/media'
 import { useLanguage } from '../i18n'
 import { Reveal } from './Reveal'
+import { DemoButton } from './DemoButton'
 
 export function EhrShowcase() {
   const { t, locale } = useLanguage()
@@ -25,10 +25,10 @@ export function EhrShowcase() {
             </div>
             <h2 className="section-title mt-4 text-balance">{title}</h2>
             <p className="prose-muted mt-4 max-w-md">{body}</p>
-            <Link to="/contact" className="btn-primary mt-8">
+            <DemoButton className="btn-primary mt-8">
               {t.cta.demo}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-            </Link>
+            </DemoButton>
           </Reveal>
 
           <Reveal delay={0.06} className="lg:col-span-7">

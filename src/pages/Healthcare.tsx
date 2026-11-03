@@ -26,6 +26,7 @@ import {
 import { Reveal } from '../components/Reveal'
 import { ComplianceBanner } from '../components/ComplianceBanner'
 import { EhrShowcase } from '../components/EhrShowcase'
+import { DemoButton } from '../components/DemoButton'
 import { Seo } from '../components/Seo'
 import { useLanguage } from '../i18n'
 import {
@@ -176,9 +177,7 @@ export function Healthcare() {
             )}
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#contact-demo" className="btn-primary">
-              {t.cta.demo}
-            </a>
+            <DemoButton className="btn-primary">{t.cta.demo}</DemoButton>
             <a href="#certifications" className="btn-ghost">
               {t.cta.viewCerts}
             </a>
@@ -480,9 +479,9 @@ export function Healthcare() {
                     <span className="text-xs font-normal text-[#faf8f4]/55">/ year</span>
                   </div>
                 </div>
-                <a href="#contact-demo" className="btn-gold mt-4 w-full text-xs uppercase tracking-wider">
+                <DemoButton className="btn-gold mt-4 w-full text-xs uppercase tracking-wider">
                   Get Detailed ROI Breakdown
-                </a>
+                </DemoButton>
               </div>
             </div>
           </div>
@@ -651,7 +650,12 @@ export function Healthcare() {
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button type="button" onClick={() => setSelectedCert(null)} className="rounded-xl border border-[#d5dcd4] bg-[#f4f1ea] px-5 py-2.5 text-xs font-semibold text-black">Close</button>
-              <a href="#contact-demo" onClick={() => setSelectedCert(null)} className="btn-primary !py-2.5 !text-xs">Request Official Certification Dossier</a>
+              <DemoButton
+                className="btn-primary !py-2.5 !text-xs"
+                onClick={() => setSelectedCert(null)}
+              >
+                Request Official Certification Dossier
+              </DemoButton>
             </div>
           </div>
         </div>
@@ -694,9 +698,12 @@ export function Healthcare() {
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button type="button" onClick={() => setSelectedProduct(null)} className="rounded-xl border border-[#d5dcd4] bg-[#f4f1ea] px-5 py-2.5 text-xs font-semibold text-black">Close Window</button>
-              <a href="#contact-demo" onClick={() => setSelectedProduct(null)} className="btn-primary !py-2.5 !text-xs">
+              <DemoButton
+                className="btn-primary !py-2.5 !text-xs"
+                onClick={() => setSelectedProduct(null)}
+              >
                 Request Demo for {selectedProduct.title}
-              </a>
+              </DemoButton>
             </div>
           </div>
         </div>

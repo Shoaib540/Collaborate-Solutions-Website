@@ -3,8 +3,18 @@ import { ArrowRight } from 'lucide-react'
 import { HeroCinema } from '../components/HeroCinema'
 import { Reveal } from '../components/Reveal'
 import { Seo } from '../components/Seo'
+import { DemoButton } from '../components/DemoButton'
 import { ehrMedia } from '../data/media'
 import { useLanguage } from '../i18n'
+
+const moduleImages = [
+  ehrMedia.screens.chart,
+  ehrMedia.screens.schedule,
+  ehrMedia.screens.interop,
+  ehrMedia.screens.telehealth,
+  ehrMedia.screens.billing,
+  ehrMedia.screens.dashboard,
+]
 
 export function Home() {
   const { t } = useLanguage()
@@ -45,6 +55,34 @@ export function Home() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-[#e2e8f0] bg-[#f8fafc] py-14 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="eyebrow">{t.home.modulesEyebrow}</p>
+            <h2 className="section-title mt-3 max-w-3xl">{t.home.modulesTitle}</h2>
+            <p className="prose-muted mt-3 max-w-2xl">{t.home.modulesBody}</p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {t.moduleHighlights.map((mod, i) => (
+              <Reveal key={mod.title} delay={i * 0.03}>
+                <article className="flex h-full flex-col overflow-hidden border border-[#e2e8f0] bg-white">
+                  <img
+                    src={moduleImages[i]}
+                    alt=""
+                    className="aspect-[16/9] w-full object-cover object-top"
+                  />
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="text-lg font-bold text-[#0f172a]">{mod.title}</h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-[#475569]">{mod.text}</p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link to="/ehr" className="btn-primary">
@@ -54,9 +92,7 @@ export function Home() {
             <Link to="/markets" className="btn-ghost">
               {t.nav.markets}
             </Link>
-            <Link to="/contact" className="btn-ghost">
-              {t.cta.demo}
-            </Link>
+            <DemoButton className="btn-ghost">{t.cta.demo}</DemoButton>
           </div>
         </div>
       </section>

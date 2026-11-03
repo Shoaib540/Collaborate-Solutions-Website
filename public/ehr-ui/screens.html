@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaborate Solutions EHR UI</title>
+  <style>
+    :root {
+      --bg: #f4f7f6;
+      --panel: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --teal: #0f766e;
+      --teal-deep: #0f3d2e;
+      --teal-soft: #ecfdf5;
+      --amber: #b45309;
+      --red: #dc2626;
+      --green: #059669;
+      --sidebar: #0b2920;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", "IBM Plex Sans", system-ui, sans-serif;
+      background: #0a1f18;
+      color: var(--ink);
+      padding: 24px;
+    }
+    .shot {
+      width: 1280px;
+      height: 720px;
+      margin: 0 auto 32px;
+      background: var(--bg);
+      border-radius: 10px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    }
+    .side {
+      background: linear-gradient(180deg, #0d3328 0%, #0a241c 100%);
+      color: #d1fae5;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 12px;
+    }
+    .logo {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, #14b8a6, #0f766e);
+      display: grid; place-items: center;
+      font-weight: 800; color: white; font-size: 14px;
+    }
+    .brand strong { display: block; font-size: 13px; color: #fff; letter-spacing: -.01em; }
+    .brand span { font-size: 10px; color: #6ee7b7; text-transform: uppercase; letter-spacing: .12em; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      font-size: 13px; color: #a7f3d0; cursor: default;
+    }
+    .nav-item.active { background: rgba(20,184,166,.18); color: #fff; font-weight: 600; }
+    .nav-ico {
+      width: 18px; height: 18px; border-radius: 4px;
+      background: rgba(255,255,255,.12); flex-shrink: 0;
+    }
+    .main { display: flex; flex-direction: column; min-width: 0; }
+    .top {
+      height: 56px; background: var(--panel); border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; gap: 16px;
+    }
+    .crumb { font-size: 13px; color: var(--muted); }
+    .crumb b { color: var(--ink); }
+    .top-right { display: flex; align-items: center; gap: 10px; }
+    .search {
+      width: 260px; height: 34px; border: 1px solid var(--line); border-radius: 8px;
+      background: #f8fafc; padding: 0 12px; font-size: 12px; color: var(--muted);
+      display: flex; align-items: center;
+    }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 999px;
+      background: #ccfbf1; color: var(--teal-deep);
+      display: grid; place-items: center; font-size: 11px; font-weight: 700;
+    }
+    .content { padding: 18px 20px; flex: 1; overflow: hidden; }
+    .row { display: flex; gap: 14px; }
+    .col { flex: 1; min-width: 0; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 14px;
+    }
+    .card h3 { font-size: 14px; margin-bottom: 10px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+    .stat {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+    }
+    .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .stat .value { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--teal-deep); }
+    .stat .delta { font-size: 11px; color: var(--green); margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th {
+      text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+      color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); font-weight: 600;
+    }
+    td { padding: 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .pill {
+      display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px;
+      font-size: 11px; font-weight: 600;
+    }
+    .pill.ok { background: #d1fae5; color: #047857; }
+    .pill.warn { background: #fef3c7; color: #b45309; }
+    .pill.bad { background: #fee2e2; color: #b91c1c; }
+    .pill.info { background: #e0f2fe; color: #0369a1; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--teal); color: #fff; border: 0; border-radius: 8px;
+      padding: 8px 12px; font-size: 12px; font-weight: 600;
+    }
+    .btn.ghost { background: #fff; color: var(--teal-deep); border: 1px solid var(--line); }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
+    .title-lg { font-size: 18px; font-weight: 700; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .soap label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin: 8px 0 4px; text-transform: uppercase; letter-spacing: .06em; }
+    .soap .box {
+      border: 1px solid var(--line); border-radius: 8px; background: #f8fafc;
+      padding: 10px; font-size: 12.5px; line-height: 1.45; min-height: 52px;
+    }
+    .cal { display: grid; grid-template-columns: 56px repeat(5, 1fr); gap: 6px; }
+    .cal .h { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; padding: 6px; }
+    .slot {
+      border: 1px solid var(--line); border-radius: 8px; background: #fff;
+      min-height: 54px; padding: 6px; font-size: 11px;
+    }
+    .appt {
+      background: var(--teal-soft); border: 1px solid #99f6e4; border-radius: 6px;
+      padding: 6px; color: var(--teal-deep); font-weight: 600; line-height: 1.3;
+    }
+    .appt.gold { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+    .appt.blue { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    .bar {
+      height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px;
+    }
+    .bar > i { display: block; height: 100%; background: var(--teal); }
+    .video-pane {
+      height: 280px; border-radius: 12px; background: linear-gradient(160deg, #134e4a, #0f172a);
+      display: grid; place-items: center; color: #ccfbf1; position: relative;
+    }
+    .patient-av {
+      width: 96px; height: 96px; border-radius: 999px; background: rgba(255,255,255,.12);
+      border: 2px solid rgba(255,255,255,.25); display: grid; place-items: center;
+      font-size: 28px; font-weight: 700;
+    }
+    .controls {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px;
+    }
+    .chip {
+      background: rgba(255,255,255,.14); color: #fff; border-radius: 999px;
+      padding: 8px 12px; font-size: 11px; font-weight: 600;
+    }
+    .chip.danger { background: var(--red); }
+    .list-item {
+      display: flex; justify-content: space-between; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 12.5px;
+    }
+    .tagline {
+      margin-top: auto; padding: 12px 8px 4px; font-size: 10px; color: #5eead4; opacity: .7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1 DASHBOARD -->
+  <section class="shot" id="dashboard" data-name="dashboard">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item active"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Clinical Dashboard</b> · Today</div>
+        <div class="top-right">
+          <div class="search">Search patients, MRN, claims…</div>
+          <div class="avatar">DR</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats">
+          <div class="stat"><div class="label">Today’s visits</div><div class="value">42</div><div class="delta">+6 vs yesterday</div></div>
+          <div class="stat"><div class="label">Open charts</div><div class="value">11</div><div class="delta">3 unsigned</div></div>
+          <div class="stat"><div class="label">Claims ready</div><div class="value">28</div><div class="delta">96% clean</div></div>
+          <div class="stat"><div class="label">NPHIES status</div><div class="value" style="font-size:18px;margin-top:10px">Connected</div><div class="delta">Eligibility live</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="toolbar"><h3>Waiting room</h3><button class="btn">Check in</button></div>
+            <table>
+              <thead><tr><th>Patient</th><th>Reason</th><th>Provider</th><th>Wait</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Sara Al-Harbi</td><td>Follow-up HTN</td><td>Dr. Khan</td><td>4 min</td><td><span class="pill ok">Ready</span></td></tr>
+                <tr><td>James Ortiz</td><td>New patient</td><td>Dr. Reed</td><td>9 min</td><td><span class="pill warn">Intake</span></td></tr>
+                <tr><td>Layla Hassan</td><td>Lab review</td><td>Dr. Khan</td><td>2 min</td><td><span class="pill ok">Ready</span></td></tr>
+                <tr><td>Michael Chen</td><td>Wound check</td><td>Dr. Patel</td><td>12 min</td><td><span class="pill info">Room 3</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>Tasks</h3>
+            <div class="list-item"><span>Sign 3 encounter notes</span><span class="pill warn">Due</span></div>
+            <div class="list-item"><span>Review abnormal labs (2)</span><span class="pill bad">Urgent</span></div>
+            <div class="list-item"><span>Prior auth · MRI lumbar</span><span class="pill info">Pending</span></div>
+            <div class="list-item"><span>MIPS quality measure Q138</span><span class="pill ok">On track</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 CHART -->
+  <section class="shot" id="chart" data-name="chart">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item active"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Patient Chart</b> · MRN 10482 · Barbara Johnson</div>
+        <div class="top-right"><button class="btn ghost">eRx</button><button class="btn">Sign &amp; close</button><div class="avatar">DR</div></div>
+      </div>
+      <div class="content">
+        <div class="row" style="margin-bottom:12px;gap:10px;flex-wrap:wrap">
+          <span class="pill ok">Active</span>
+          <span class="muted">DOB 14 May 1958 · F · PCP Dr. Reed</span>
+          <span class="pill warn">Allergy: Penicillin</span>
+          <span class="pill info">HTN · T2DM</span>
+        </div>
+        <div class="grid-2">
+          <div class="card soap">
+            <div class="toolbar"><div class="title-lg">SOAP note · Office visit</div><button class="btn ghost">Templates</button></div>
+            <label>Subjective</label>
+            <div class="box">Patient reports improved BP control on current regimen. Occasional morning headache. Adherent to meds. No chest pain or dyspnea.</div>
+            <label>Objective</label>
+            <div class="box">BP 128/78 · HR 72 · BMI 27.4 · Lungs clear · Heart RRR · Extremities no edema</div>
+            <label>Assessment / Plan</label>
+            <div class="box">1. Essential hypertension — continue losartan 50mg daily. 2. T2DM — A1c pending. Recheck labs in 3 months. RTC sooner if headaches worsen.</div>
+          </div>
+          <div>
+            <div class="card">
+              <h3>Medications</h3>
+              <div class="list-item"><span>Losartan 50 mg daily</span><span class="pill ok">Active</span></div>
+              <div class="list-item"><span>Metformin 500 mg BID</span><span class="pill ok">Active</span></div>
+              <div class="list-item"><span>Atorvastatin 20 mg</span><span class="pill ok">Active</span></div>
+            </div>
+            <div class="card">
+              <h3>Vitals trend</h3>
+              <div class="muted">Systolic BP (last 6 visits)</div>
+              <div class="bar"><i style="width:78%"></i></div>
+              <div class="muted" style="margin-top:8px">Average 131 mmHg · Goal &lt;130</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 SCHEDULE -->
+  <section class="shot" id="schedule" data-name="schedule">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item active"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Practice Scheduling</b> · Week of Mar 10</div>
+        <div class="top-right"><button class="btn ghost">Providers</button><button class="btn">New appointment</button><div class="avatar">FD</div></div>
+      </div>
+      <div class="content">
+        <div class="card">
+          <div class="cal">
+            <div class="h"></div><div class="h">Mon</div><div class="h">Tue</div><div class="h">Wed</div><div class="h">Thu</div><div class="h">Fri</div>
+            <div class="h">9:00</div>
+            <div class="slot"><div class="appt">Ortiz · NP</div></div>
+            <div class="slot"><div class="appt gold">Tele · Ali</div></div>
+            <div class="slot"><div class="appt">Johnson · FU</div></div>
+            <div class="slot"></div>
+            <div class="slot"><div class="appt blue">Hassan · Labs</div></div>
+            <div class="h">10:00</div>
+            <div class="slot"><div class="appt blue">Chen · Wound</div></div>
+            <div class="slot"><div class="appt">Reed block</div></div>
+            <div class="slot"></div>
+            <div class="slot"><div class="appt gold">Tele · Park</div></div>
+            <div class="slot"><div class="appt">New · Diaz</div></div>
+            <div class="h">11:00</div>
+            <div class="slot"></div>
+            <div class="slot"><div class="appt">Khan · Cardio</div></div>
+            <div class="slot"><div class="appt">Al-Harbi</div></div>
+            <div class="slot"><div class="appt blue">CCM call</div></div>
+            <div class="slot"></div>
+            <div class="h">13:00</div>
+            <div class="slot"><div class="appt gold">Tele · RPM</div></div>
+            <div class="slot"></div>
+            <div class="slot"><div class="appt">Patel · Derm</div></div>
+            <div class="slot"><div class="appt">Walk-in</div></div>
+            <div class="slot"><div class="appt gold">NPHIES auth</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 BILLING -->
+  <section class="shot" id="billing" data-name="billing">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item active"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Revenue Cycle</b> · Claims worklist</div>
+        <div class="top-right"><div class="search">Search claim ID or payer…</div><div class="avatar">RC</div></div>
+      </div>
+      <div class="content">
+        <div class="stats">
+          <div class="stat"><div class="label">Clean claim rate</div><div class="value">96%</div><div class="delta">+2.1% MoM</div></div>
+          <div class="stat"><div class="label">AR &gt; 60 days</div><div class="value">8%</div><div class="delta">Target &lt;10%</div></div>
+          <div class="stat"><div class="label">Denials open</div><div class="value">14</div><div class="delta">4 high priority</div></div>
+          <div class="stat"><div class="label">Collected MTD</div><div class="value" style="font-size:22px">$184k</div><div class="delta">US + NPHIES</div></div>
+        </div>
+        <div class="card">
+          <div class="toolbar"><h3>Claims</h3><button class="btn">Submit batch</button></div>
+          <table>
+            <thead><tr><th>Claim</th><th>Patient</th><th>Payer</th><th>CPT</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>CL-98211</td><td>Barbara Johnson</td><td>Aetna</td><td>99214</td><td>$186</td><td><span class="pill ok">Paid</span></td></tr>
+              <tr><td>CL-98234</td><td>Sara Al-Harbi</td><td>Bupa Arabia</td><td>99213</td><td>SAR 320</td><td><span class="pill info">Submitted</span></td></tr>
+              <tr><td>CL-98240</td><td>James Ortiz</td><td>UHC</td><td>99204</td><td>$248</td><td><span class="pill warn">Scrub</span></td></tr>
+              <tr><td>CL-98251</td><td>Michael Chen</td><td>Medicare</td><td>11042</td><td>$412</td><td><span class="pill bad">Denied</span></td></tr>
+              <tr><td>CL-98260</td><td>Layla Hassan</td><td>NPHIES</td><td>80053</td><td>SAR 145</td><td><span class="pill ok">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 TELEHEALTH -->
+  <section class="shot" id="telehealth" data-name="telehealth">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item active"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Telehealth</b> · Visit VIS-784512 in progress</div>
+        <div class="top-right"><span class="pill ok">Connected</span><div class="avatar">DR</div></div>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div>
+            <div class="video-pane">
+              <div style="text-align:center">
+                <div class="patient-av">JA</div>
+                <div style="margin-top:10px;font-size:13px">John Anderson · Connected</div>
+                <div class="muted" style="color:#99f6e4">08:24 · Hypertension follow-up</div>
+              </div>
+              <div class="controls">
+                <span class="chip">Mute</span>
+                <span class="chip">Camera</span>
+                <span class="chip">Share</span>
+                <span class="chip danger">End visit</span>
+              </div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <div class="toolbar"><h3>Quick actions</h3></div>
+              <div class="row" style="gap:8px">
+                <button class="btn ghost">Order labs</button>
+                <button class="btn ghost">ePrescribe</button>
+                <button class="btn ghost">Add problem</button>
+              </div>
+            </div>
+          </div>
+          <div class="card soap">
+            <h3>Clinical notes</h3>
+            <label>Subjective</label>
+            <div class="box">Doing well on meds. Home BP readings 120–130 systolic.</div>
+            <label>Plan</label>
+            <div class="box">Continue current therapy. Send portal summary. Schedule 3-month follow-up.</div>
+            <div style="margin-top:14px">
+              <h3 style="margin-bottom:8px">Waiting room</h3>
+              <div class="list-item"><span>S. Mitchell · 2 min</span><span class="pill warn">Waiting</span></div>
+              <div class="list-item"><span>D. Rodriguez · 5 min</span><span class="pill warn">Waiting</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 INTEROP -->
+  <section class="shot" id="interop" data-name="interop">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div><strong>Collaborate Solutions</strong><span>EHR Platform</span></div>
+      </div>
+      <div class="nav-item"><div class="nav-ico"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-ico"></div>Patients</div>
+      <div class="nav-item"><div class="nav-ico"></div>Charting</div>
+      <div class="nav-item"><div class="nav-ico"></div>Schedule</div>
+      <div class="nav-item"><div class="nav-ico"></div>Billing</div>
+      <div class="nav-item"><div class="nav-ico"></div>Telehealth</div>
+      <div class="nav-item active"><div class="nav-ico"></div>Exchange</div>
+      <div class="tagline">© Collaborate Solutions</div>
+    </aside>
+    <div class="main">
+      <div class="top">
+        <div class="crumb"><b>Interoperability</b> · FHIR R4 · NPHIES · HL7</div>
+        <div class="top-right"><span class="pill ok">All systems operational</span><div class="avatar">IT</div></div>
+      </div>
+      <div class="content">
+        <div class="grid-3" style="margin-bottom:14px">
+          <div class="card"><div class="label muted">NPHIES</div><div class="title-lg" style="margin-top:6px">Connected</div><div class="muted" style="margin-top:6px">Eligibility · Claims · Pre-auth</div><div class="bar"><i style="width:100%;background:var(--green)"></i></div></div>
+          <div class="card"><div class="label muted">HL7 FHIR R4</div><div class="title-lg" style="margin-top:6px">API live</div><div class="muted" style="margin-top:6px">Patient · Encounter · Claim</div><div class="bar"><i style="width:94%"></i></div></div>
+          <div class="card"><div class="label muted">eRx network</div><div class="title-lg" style="margin-top:6px">Online</div><div class="muted" style="margin-top:6px">EPCS · Benefit check</div><div class="bar"><i style="width:98%;background:var(--green)"></i></div></div>
+        </div>
+        <div class="card">
+          <div class="toolbar"><h3>Exchange activity today</h3><button class="btn ghost">Developer portal</button></div>
+          <table>
+            <thead><tr><th>Channel</th><th>Messages</th><th>Success</th><th>Latency</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>NPHIES Eligibility</td><td>1,248</td><td>99.4%</td><td>180 ms</td><td><span class="pill ok">Healthy</span></td></tr>
+              <tr><td>FHIR Patient Access</td><td>642</td><td>99.8%</td><td>95 ms</td><td><span class="pill ok">Healthy</span></td></tr>
+              <tr><td>Lab ORU results</td><td>318</td><td>98.1%</td><td>220 ms</td><td><span class="pill warn">Watch</span></td></tr>
+              <tr><td>QRDA-III MIPS export</td><td>12</td><td>100%</td><td>—</td><td><span class="pill ok">Ready</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

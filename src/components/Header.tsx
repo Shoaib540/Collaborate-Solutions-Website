@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Globe2, Menu, X } from 'lucide-react'
 import { navLinks, site } from '../data/site'
 import { useLanguage } from '../i18n'
+import { DemoButton } from './DemoButton'
 
 export function Header() {
   const [open, setOpen] = useState(false)
@@ -73,9 +74,7 @@ export function Header() {
             <Globe2 className="h-3.5 w-3.5" />
             {locale === 'en' ? t.lang.ar : t.lang.en}
           </button>
-          <Link to="/contact" className="btn-primary !py-2.5 !px-4">
-            {t.cta.demo}
-          </Link>
+          <DemoButton className="btn-primary !py-2.5 !px-4">{t.cta.demo}</DemoButton>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
@@ -117,9 +116,9 @@ export function Header() {
                 {t.nav[link.key]}
               </NavLink>
             ))}
-            <Link to="/contact" onClick={() => setOpen(false)} className="btn-primary mt-2">
+            <DemoButton className="btn-primary mt-2" onClick={() => setOpen(false)}>
               {t.cta.demo}
-            </Link>
+            </DemoButton>
           </nav>
         </div>
       )}

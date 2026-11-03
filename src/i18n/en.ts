@@ -202,28 +202,28 @@ export const en: Dictionary = {
   ],
   moduleHighlights: [
     {
-      title: 'Next-Gen EHR',
-      text: 'AI-assisted documentation, e-prescribing, and specialty templates in one chart.',
+      title: 'Clinical EHR & Charting',
+      text: 'Specialty templates, SOAP notes, allergies, meds, and decision support so providers finish charts during the visit — not after hours.',
     },
     {
-      title: 'Practice Management',
-      text: 'Scheduling, eligibility, billing, and denial management in one revenue layer.',
+      title: 'Practice Management & Billing',
+      text: 'Multi-provider scheduling, real-time eligibility, claim scrubbing, denials, and collections for US payers and NPHIES claims.',
     },
     {
-      title: 'FHIR Interoperability',
-      text: 'HL7 FHIR R4 APIs for labs, HIEs, SMART apps, and national exchange.',
+      title: 'FHIR & National Exchange',
+      text: 'HL7 FHIR R4 APIs connect labs, HIEs, SMART apps, patient access, and Saudi NPHIES eligibility, pre-auth, and claims.',
     },
     {
-      title: 'Telehealth & RPM',
-      text: 'Embedded virtual visits and cellular remote monitoring inside the same chart.',
+      title: 'Telehealth & Virtual Care',
+      text: 'Browser-based visits with waiting room, split-screen charting, e-prescribe, and multi-party consults inside the same record.',
     },
     {
-      title: 'Value-Based Care',
-      text: 'CCM, APCM, CoCM, and BHI with automated time tracking and billing support.',
+      title: 'RPM & Care Management',
+      text: 'Cellular remote monitoring plus CCM, APCM, CoCM, and BHI with time tracking and billing support for chronic populations.',
     },
     {
-      title: 'MIPS & NPHIES',
-      text: 'US quality / PI reporting plus Saudi eligibility, pre-auth, and claims.',
+      title: 'MIPS, MU3 & Compliance',
+      text: 'Quality and Promoting Interoperability reporting for US programs, plus bilingual Arabic/English workflows for Gulf clinics.',
     },
   ],
 }

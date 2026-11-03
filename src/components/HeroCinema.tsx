@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, BadgeCheck, Play } from 'lucide-react'
 import { ehrMedia } from '../data/media'
 import { useLanguage } from '../i18n'
+import { DemoButton } from './DemoButton'
 
 export function HeroCinema() {
   const { t } = useLanguage()
@@ -25,10 +26,10 @@ export function HeroCinema() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link to="/contact" className="btn-primary">
+            <DemoButton className="btn-primary">
               {t.cta.demo}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-            </Link>
+            </DemoButton>
             <Link to="/ehr" className="btn-ghost">
               <Play className="h-4 w-4 fill-current" />
               {t.cta.exploreEhr}
@@ -37,18 +38,22 @@ export function HeroCinema() {
         </div>
 
         <div className="relative">
-          <div className="overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#0a2a20] shadow-[0_30px_80px_-40px_rgba(15,61,46,0.55)]">
+          <div className="relative overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#0a2a20] shadow-[0_30px_80px_-40px_rgba(15,61,46,0.55)]">
             <video
               className="aspect-[16/10] w-full object-cover object-top"
               autoPlay
               muted
               loop
               playsInline
+              controls
               preload="auto"
               poster={ehrMedia.heroPoster}
             >
               <source src={ehrMedia.heroVideo} type="video/mp4" />
             </video>
+            <p className="pointer-events-none absolute bottom-12 start-3 rounded bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white sm:bottom-14">
+              Unmute for EHR overview narration
+            </p>
           </div>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {[ehrMedia.screens.chart, ehrMedia.screens.schedule, ehrMedia.screens.billing].map((src) => (

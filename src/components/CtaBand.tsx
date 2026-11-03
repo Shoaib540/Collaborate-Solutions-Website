@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from './Reveal'
 import { useLanguage } from '../i18n'
+import { DemoButton } from './DemoButton'
 
 type Props = {
   eyebrow?: string
   title?: string
   body?: string
   ctaLabel?: string
-  ctaTo?: string
   secondaryLabel?: string
   secondaryTo?: string
 }
@@ -18,7 +18,6 @@ export function CtaBand({
   title,
   body,
   ctaLabel,
-  ctaTo = '/contact',
   secondaryLabel,
   secondaryTo = '/ehr',
 }: Props) {
@@ -35,10 +34,10 @@ export function CtaBand({
             </h2>
             <p className="mt-4 max-w-xl text-[#475569]">{body ?? t.home.demoBody}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to={ctaTo} className="btn-primary">
+              <DemoButton className="btn-primary">
                 {ctaLabel ?? t.cta.demo}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </Link>
+              </DemoButton>
               <Link to={secondaryTo} className="btn-ghost">
                 {secondaryLabel ?? t.cta.exploreEhr}
               </Link>
