@@ -6,6 +6,7 @@ import { Analytics } from './components/Analytics'
 import { Home } from './pages/Home'
 import { About } from './pages/About'
 import { Healthcare } from './pages/Healthcare'
+import { Markets } from './pages/Markets'
 import { Contact } from './pages/Contact'
 import { Privacy, Terms, Security, Credits } from './pages/Legal'
 
@@ -20,6 +21,7 @@ export default function App() {
               <Route index element={<Home />} />
               <Route path="about" element={<About />} />
               <Route path="ehr" element={<Healthcare />} />
+              <Route path="markets" element={<Markets />} />
               <Route path="healthcare" element={<Navigate to="/ehr" replace />} />
               <Route path="services" element={<Navigate to="/ehr" replace />} />
               <Route path="services/*" element={<Navigate to="/ehr" replace />} />

@@ -7,3 +7,6 @@ dist
 .env.*.local
 !.env.example
 tsconfig.tsbuildinfo
+
+demo-video/
+public/media/videos/ehr-ui-concat.txt

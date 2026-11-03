@@ -1,6 +1,6 @@
 export type Locale = 'en' | 'ar'
 
-export type NavKey = 'home' | 'ehr' | 'about' | 'contact'
+export type NavKey = 'home' | 'ehr' | 'markets' | 'about' | 'contact'
 
 export type Dictionary = {
   brand: {
@@ -30,6 +30,11 @@ export type Dictionary = {
     heroTitleAccent: string
     heroBody: string
     trustLine: string
+    pillarsEyebrow: string
+    pillarsTitle: string
+    pillarsBody: string
+    outcomesEyebrow: string
+    outcomesTitle: string
     marketsEyebrow: string
     marketsTitle: string
     marketsBody: string
@@ -106,6 +111,8 @@ export type Dictionary = {
     kuwait: string
   }
   badges: string[]
+  pillars: { title: string; text: string; cta: string }[]
+  outcomes: { value: string; label: string; detail: string }[]
   whyItems: { title: string; text: string }[]
   moduleHighlights: { title: string; text: string }[]
 }

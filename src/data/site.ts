@@ -1,8 +1,8 @@
 export const site = {
   name: 'Collaborate Solutions',
-  tagline: 'Certified EHR for modern care',
+  tagline: 'EHR that simplifies care delivery',
   description:
-    'Certified Electronic Health Records for clinics and hospitals across the United States and Saudi Arabia / Gulf.',
+    'Clean, certified Electronic Health Records for clinics and hospitals across the United States and Saudi Arabia / Gulf.',
   phone: '+92 333 4415825',
   phoneHref: 'tel:+923334415825',
   email: 'info@collaborate-solutions.com',
@@ -22,6 +22,7 @@ export const site = {
 export const navLinks = [
   { key: 'home' as const, to: '/' },
   { key: 'ehr' as const, to: '/ehr' },
+  { key: 'markets' as const, to: '/markets' },
   { key: 'about' as const, to: '/about' },
   { key: 'contact' as const, to: '/contact' },
 ]

@@ -16,7 +16,7 @@ export function About() {
         eyebrow={t.about.eyebrow}
         title={t.about.title}
         subtitle={t.about.subtitle}
-        image={ehrMedia.aboutHero}
+        image={ehrMedia.screens.dashboard}
       />
 
       <section className="py-20">

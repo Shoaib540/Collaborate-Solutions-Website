@@ -10,7 +10,7 @@ export function Header() {
   const { t, locale, toggleLocale } = useLanguage()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -23,56 +23,38 @@ export function Header() {
     }
   }, [open])
 
-  const solid = scrolled || open
-
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        solid
-          ? 'border-b border-[#d5dcd4] bg-[#faf8f4]/95 shadow-[0_12px_40px_-28px_rgba(15,20,18,0.45)] backdrop-blur-md'
-          : 'border-b border-transparent bg-gradient-to-b from-[#081c15]/70 to-transparent'
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        scrolled || open
+          ? 'border-[#e2e8f0] bg-white/95 shadow-[0_8px_30px_-20px_rgba(15,23,42,0.35)] backdrop-blur-md'
+          : 'border-[#e2e8f0]/80 bg-white/90 backdrop-blur-sm'
       }`}
     >
-      <div className="mx-auto flex h-[4.75rem] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.25rem] lg:px-8">
+        <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <img
             src="/logo/cs-logo.png"
             alt={site.name}
-            className="h-11 w-11 rounded-md bg-[#faf8f4] object-contain p-0.5 shadow-sm"
+            className="h-9 w-9 rounded object-contain"
           />
           <div className="leading-tight">
-            <div
-              className={`text-[1.15rem] font-extrabold tracking-tight sm:text-[1.25rem] ${
-                solid ? 'text-black' : 'text-[#faf8f4]'
-              }`}
-            >
-              Collaborate
-            </div>
-            <div
-              className={`text-[0.62rem] font-bold uppercase tracking-[0.22em] ${
-                solid ? 'text-[#1b4332]' : 'text-[#e6d5a8]'
-              }`}
-            >
+            <div className="text-[1.05rem] font-bold tracking-tight text-[#0f172a]">Collaborate</div>
+            <div className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#1a6b4f]">
               Solutions
             </div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 xl:gap-7 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.to === '/'}
               className={({ isActive }) =>
-                `text-[0.88rem] font-semibold transition-colors ${
-                  solid
-                    ? isActive
-                      ? 'text-[#1b4332]'
-                      : 'text-black hover:text-[#1b4332]'
-                    : isActive
-                      ? 'text-[#e6d5a8]'
-                      : 'text-[#faf8f4]/88 hover:text-[#e6d5a8]'
+                `text-sm font-semibold transition-colors ${
+                  isActive ? 'text-[#0f3d2e]' : 'text-[#334155] hover:text-[#0f3d2e]'
                 }`
               }
             >
@@ -81,21 +63,17 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-2.5 lg:flex">
           <button
             type="button"
             onClick={toggleLocale}
-            className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-bold tracking-wide transition ${
-              solid
-                ? 'border-[#1b4332]/25 text-[#1b4332] hover:bg-[#e8eee9]'
-                : 'border-[#faf8f4]/35 text-[#faf8f4] hover:bg-white/10'
-            }`}
+            className="inline-flex items-center gap-1.5 rounded-md border border-[#e2e8f0] px-3 py-2 text-xs font-bold text-[#0f3d2e] hover:bg-[#f1f5f4]"
             aria-label={t.lang.switchTo}
           >
             <Globe2 className="h-3.5 w-3.5" />
             {locale === 'en' ? t.lang.ar : t.lang.en}
           </button>
-          <Link to="/contact" className={solid ? 'btn-primary !py-2.5 !px-4' : 'btn-gold !py-2.5 !px-4'}>
+          <Link to="/contact" className="btn-primary !py-2.5 !px-4">
             {t.cta.demo}
           </Link>
         </div>
@@ -104,9 +82,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleLocale}
-            className={`inline-flex h-11 items-center gap-1.5 rounded-full border px-3 text-xs font-bold ${
-              solid ? 'border-[#0f1412]/20 text-black' : 'border-[#faf8f4]/45 text-[#faf8f4]'
-            }`}
+            className="inline-flex h-10 items-center gap-1 rounded-md border border-[#e2e8f0] px-2.5 text-xs font-bold text-[#0f3d2e]"
             aria-label={t.lang.switchTo}
           >
             <Globe2 className="h-3.5 w-3.5" />
@@ -114,9 +90,7 @@ export function Header() {
           </button>
           <button
             type="button"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-full border ${
-              solid ? 'border-[#0f1412]/20 text-black' : 'border-[#faf8f4]/45 text-[#faf8f4]'
-            }`}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[#e2e8f0] text-[#0f172a]"
             aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((v) => !v)}
           >
@@ -126,7 +100,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-[#d5dcd4] bg-[#faf8f4] lg:hidden">
+        <div className="border-t border-[#e2e8f0] bg-white lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
             {navLinks.map((link) => (
               <NavLink
@@ -136,7 +110,7 @@ export function Header() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `rounded-md px-3 py-3 text-base font-semibold ${
-                    isActive ? 'bg-[#e8eee9] text-[#1b4332]' : 'text-black hover:bg-[#e8eee9]/70'
+                    isActive ? 'bg-[#f1f5f4] text-[#0f3d2e]' : 'text-[#0f172a] hover:bg-[#f8fafc]'
                   }`
                 }
               >
